@@ -1,0 +1,46 @@
+{% extends 'login/base2.html' %}
+
+{% block content %}
+<div class="banner-info">
+  <div class="w3-bar w3-black">
+      <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Viajes');"><i class="fa fa-car w3-margin-right"></i>Publicar Viaje</button>
+    </div>
+    <div id="Viajes" class="w3-container w3-white w3-padding-16 myLink">
+      <div class="banner-left wow fadeInLeft animated" data-wow-delay=".5s"" >
+      <h3>Publica tu viaje con nosotros</h3>
+      <div class="w3-row-padding" style="margin:0 -16px;">
+        <div class="w3-half">
+         <form method="post">
+            <br>
+            Fecha inicio: <input type="date" name="fecha"">
+            <br>
+            <input type="checkbox" name="porta_maleta"> Porta Maleta
+            <br>
+            <input type="checkbox" name="silla_niños"> Silla Niños
+            <br>
+            <input type="checkbox" name="mascotas"> Mascotas
+            <br>
+            <input type="checkbox" name="max_personas_atras"> Maximo 2 personas atras
+            <br>
+            <input type="number" name="tarifapreferencias"> Tarifa por kilometro
+            <br>
+            <input type="number" name="asientosdisponibles"> Asientos disponibles
+            <br>
+            Origen: <input type="text" name="origen">
+            <br>
+            Hora de Partida : <input type="time" name="hora_origen">
+            <br>
+            Destino: <input type="text" name="destino">
+            <br>
+            Fecha de termino : <input type="date" name="fecha">
+            <br>
+            Hora de Termino: <input type="time" name="hora_destino">
+            <br>
+          {% csrf_token %}
+           {{ form.as_p}}
+      </div>
+      </div>
+      <p><button class="w3-button w3-dark-grey" type = "submit" >Crear</button></p>
+    </form>
+    </div>
+{% endblock %}

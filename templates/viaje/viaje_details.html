@@ -1,0 +1,231 @@
+{% extends 'login/base2.html' %}
+
+{% block content %}
+ <style type="text/css">
+        td{
+          text-align: center;
+        }
+        th{
+          text-align: center;
+        }
+      </style>
+<div class="banner-info">
+  <div class="w3-bar w3-black">
+      <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Viajes');"><i class="fa fa-car w3-margin-right"></i>Detalles Viaje</button>
+    </div>
+    <div id="Viajes" class="w3-container w3-white w3-padding-16 myLink">
+      <div class="banner-info wow fadeInLeft animated" data-wow-delay=".5s"" >
+         <h1 style="text-align: center;">Tu Viaje</h1>
+         <div class="banner-info" style="padding-left: 5%;">
+            <p><strong>Fecha Salida: </strong>{{viajes.2}} a las {{viajes.1.0.0.hora_salida}}</p>
+            <p><strong>Tiene Porta-Maleta: </strong>{% if viajes.0.porta_maleta %} SI {% else %} NO {% endif %}</p>
+            <p><strong>Tiene Silla de Niños: </strong>{% if viajes.0.silla_niños %} SI {% else %} NO {% endif %}</p>
+            <p><strong>Permite Mascostas: </strong>{% if viajes.0.mascotas %} SI {% else %} NO {% endif %}</p>
+            <p><strong>Tarifa : </strong> {{viajes.0.tarifaPreferencias}}</p>
+            <p><strong>Asientos Totales: </strong> {{viajes.0.plazas_disponibles}}</p>
+            <p><strong>Estado Viaje: </strong>{{viajes.0.estado}}</p>
+          </div>
+
+      </div><br><br>
+        {% if viajes.0 %}
+        <div class="banner-left wow fadeInLeft animated" data-wow-delay=".5s">      
+            <h1 style="text-align: center;  font-size: 200%;">Paradas viaje</h1>
+                <div class="panel panel-default table-responsive">
+                  <table class="table  table-responsive table-striped">
+                    <thead>
+                      <tr>
+                        <th>Origen</th>
+                        <th>Destino</th>
+                        <th> Hora Llegada</th>
+                        <th>Fecha</th>
+                        <th>Asientos Disp.</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for viaje in viajes.1 %}
+                        <tr>
+                          <td>{{ viaje.0.origen.nombre }}</td>
+                          <td>{{ viaje.0.destino.nombre }}</td>
+                          <td>{{ viaje.0.hora_llegada }}</td>
+                          <td>{{ viaje.0.fecha }}</a></td>
+                          <td>{{ viaje.0.asientos_disponibles }}</a></td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+        </div>
+        {% else %}
+          <h1 style="text-align: center;  font-size: 200%;">No hay registros de viajes</h1>
+        {% endif %}
+      <div>  
+        {% csrf_token %}
+        <input type="hidden" name="holiwi"  id="holiwi">
+      </div>
+          {% if reservas %}
+             <h1 style="text-align: center;  font-size: 200%;">Reservas pendientes para este viaje</h1>
+               <div class="banner-left wow fadeInLeft animated" data-wow-delay=".5s">      
+                  <div class="panel panel-default table-responsive">
+                    <table class="table  table-responsive table-striped">
+                        <thead>
+                          <tr>
+                              <th >Reserva id</th>
+                              <th >Pasajero</th>
+                              <th >Plazas</th>
+                              <th >Origen</th>
+                              <th >Destino</th>
+                              <th >Precio</th>
+                              <th >Estado</th>
+                              <th >Aceptar</th>
+                              <th >Rechazar</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% for reserva in reservas %}
+                            <tr>
+                              <td>{{ reserva.0}}</a></td>
+                              <td>{{ reserva.6}}</a></td>
+                              <td>{{ reserva.1}}</a></td>
+                              <td>{{ reserva.2}}</a></td>
+                              <td>{{ reserva.3}}</a></td>
+                              <td>{{ reserva.4}}</a></td>
+                              <td>{{ reserva.5}}</a></td>
+                              <td ><a href="{% url 'confirmarAceptarReservaConductor' reserva.0 %}"><button class="round-button" onclick=""><i class="fa fa-check" style="text-align: center;"></i></button></a></td>
+                              <td ><a href="{% url 'confirmarCanReservaConductor' reserva.0 %}"><button class="round-button" onclick=""><i class="fa fa-times" style="text-align: center;"></i></button></a></td>
+                            </tr>
+                          {% endfor %}
+                        </tbody>
+                    </table>
+                  </div>
+                </div>
+              {% else %}<br><br>
+                <div class="banner-left wow fadeInLeft animated" data-wow-delay=".5s">
+                    <h1 style="text-align: center;  font-size: 200%;"> No hay reservas pendientes para este viaje</h1>
+                </div>
+              {% endif %}<br><br>
+
+          {% if reservasdecididasaceptadas %}
+              <div class="banner-left wow fadeInLeft animated" data-wow-delay=".5s">      
+                  <h1 style="text-align: center;  font-size: 200%;">Reservas aceptadas</h1  >
+                  <div class="panel panel-default table-responsive">
+                      <table class="table  table-responsive table-striped">
+                        <thead>
+                          <tr>
+                            <th>Reserva id</th>
+                            <th>Pasajero</th>
+                            <th>Plazas</th>
+                            <th>Origen</th>
+                            <th>Destino</th>
+                            <th>Precio</th>
+                            <th>Estado</th>
+                            <th>Rechazar</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        {% for reservasdecididas in reservasdecididasaceptadas %}
+                          <tr>
+                            <td>{{ reservasdecididas.0}}</td>
+                            <td>{{ reservasdecididas.6}}</td>
+                            <td>{{ reservasdecididas.1}}</td>
+                            <td>{{ reservasdecididas.2}}</td>
+                            <td>{{ reservasdecididas.3}}</td>
+                            <td>{{ reservasdecididas.4}}</td>
+                            <td>{{ reservasdecididas.5}}</td>
+                            <td ><a href="{% url 'confirmarCanReservaAceptadaConductor' reservasdecididas.0 %}"><button class="round-button" onclick=""><i class="fa fa-times" style="text-align: center;"></i></button></a></td>
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                  </div>
+              </div>
+              {% else %}
+                <h1 style="text-align: center;  font-size: 200%;">No hay reservas aceptadas</h1>
+              {% endif %}<br><br>
+         {% if reservasdecididasrechazadas %}
+            <h1 style="text-align: center;  font-size: 200%;">Reservas Rechazadas</h1>
+            <div class="banner-left wow fadeInLeft animated" data-wow-delay=".5s">      
+              <div class="panel panel-default table-responsive">
+                <table class="table  table-responsive table-striped">
+                  <thead>
+                    <tr>
+                      <th>Reserva id</th>
+                      <th>Pasajero</th>
+                      <th>Plazas</th>
+                      <th>Origen</th>
+                      <th>Destino</th>
+                      <th>Precio</th>
+                      <th>Estado</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for reservasdecididas in reservasdecididasrechazadas %}
+                      <tr>
+                        <td>{{ reservasdecididas.0}}</td>
+                        <td>{{ reservasdecididas.6}}</td>
+                        <td>{{ reservasdecididas.1}}</td>
+                        <td>{{ reservasdecididas.2}}</td>
+                        <td>{{ reservasdecididas.3}}</td>
+                        <td>{{ reservasdecididas.4}}</td>
+                        <td>{{ reservasdecididas.5}}</td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div><br>
+            {% else %}
+                <h1 style="text-align: center;  font-size: 200%;">No hay reservas rechazadas</h1>
+            {% endif %}
+        <input type=button value="Atras" onClick="javascript:history.go(-1);" style="margin-left: 2%" class="w3-button w3-dark-grey">
+      </div><br><br>
+  </div>
+
+
+<script>
+      function initMap() {
+        var directionsService = new google.maps.DirectionsService;
+        var directionsDisplay = new google.maps.DirectionsRenderer;
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 6,
+          center: {lat: 41.85, lng: -87.65}
+        });
+        directionsDisplay.setMap(map);
+          calculateAndDisplayRoute(directionsService, directionsDisplay);
+      }
+      function calculateAndDisplayRoute(directionsService, directionsDisplay) {
+         var checkboxArray = {{ city_array|safe }};
+         var waypts = []
+        for (var i = 1; i < checkboxArray.length -1; i++) {
+            waypts.push({
+              location: checkboxArray[i],
+              stopover: true
+            });
+        }
+        directionsService.route({
+          origin: checkboxArray[0],
+          destination: checkboxArray[checkboxArray.length-1],
+          waypoints: waypts,
+          optimizeWaypoints: true,
+          travelMode: 'DRIVING'
+        }, function(response, status) {
+          if (status === 'OK') {
+            directionsDisplay.setDirections(response);
+            var route = response.routes[0];
+            var aux = '';
+            for (var i = 0; i < route.legs.length; i++) {
+             aux += ' ' + route.legs[i].distance.text
+            }
+            document.getElementById("holiwi").value = aux;
+          } else {
+            window.alert('Directions request failed due to ' + status);
+          }
+        });
+      }
+    </script>
+  <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAD6Q31QwQK0pv7twtzD32efp6hLa0uFEs&callback=initMap">
+    </script>
+
+<!-- Page content -->
+  <!-- Contact -->
+{% endblock %}

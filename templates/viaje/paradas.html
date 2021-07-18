@@ -1,0 +1,67 @@
+{% extends 'login/base2.html' %}
+
+{% block content %}
+    <style>
+       #map {
+    width: 25%;
+    height: 300px;
+}
+    #map2{
+    width: 25%;
+    height: 300px;
+}
+.controls {
+    margin-top: 10px;
+    border: 1px solid transparent;
+    border-radius: 2px 0 0 2px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    height: 32px;
+    outline: none;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+.button {
+    color: green;
+}
+    </style>
+<div class="banner-info">
+    <div class="w3-bar w3-black">
+        <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Viajes');"><i class="fa fa-car w3-margin-right"></i>Buscar Viaje</button>
+     </div>
+     <div id="Viajes" class="w3-container w3-white w3-padding-16 myLink"><br><br>
+       <div class="w3-row-padding" style="margin:0 -16px;">
+         <div class="w3-half">
+           {% if error %}
+              <a style = "width: 15% ;height: auto;font-size:1vw">{{error}}</a>
+           {% endif %}
+           <form method="post">
+           {% csrf_token %}
+             Parada<br><input type="text" class="form-control" id="where_load"  name = "direccion" required class="vTextField" maxlength="30" />
+           {{ form.as_p}}
+         </div>
+        </div>
+         <br>
+       <div class="banner-left">
+          <a href="{% url 'cancelar_crear_viaje' %}" class="w3-button w3-dark-grey" >Cancelar </a>
+          <button class="w3-button w3-dark-grey" name="publicar2" value="1" style="margin-left: 3%">Publicar Viaje</button>
+          <button class="w3-button w3-dark-grey" type = "submit" name="agregar2"  value="1" style="margin-left: 3%">Agregar Parada</button>
+      </div>
+    </form>
+    </div>
+  </div>
+
+<script>
+function onLoaded() {
+
+ var options = {
+  types: ['(cities)'],
+  componentRestrictions: {country: "cl"}
+ };
+        var location_input = document.getElementById('where_load');
+        var autocomplete = new google.maps.places.Autocomplete(location_input,options);
+
+    }
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAD6Q31QwQK0pv7twtzD32efp6hLa0uFEs&libraries=places&callback=onLoaded"></script>            
+
+{% endblock %}
